@@ -39,7 +39,7 @@ public class StudentRest {
 
     public Student addStudent(Student student) {
         restTemplate = new RestTemplate();
-        
+
         HttpEntity<Student> s = new HttpEntity<>(student);
         ResponseEntity<Student> response = restTemplate.exchange(
                 "http://localhost:3000/students",
