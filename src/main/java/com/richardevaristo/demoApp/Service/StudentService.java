@@ -1,42 +1,46 @@
 package com.richardevaristo.demoApp.Service;
 
 import com.richardevaristo.demoApp.Model.Student;
+import com.richardevaristo.demoApp.Rest.StudentRest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class StudentService {
-    List<Student> students = new ArrayList<>(Arrays.asList(
-            new Student(1, "Richard Evaristo", "Computer Science"),
-            new Student(2, "John Doe", "Computer Engineering"),
-            new Student(3, "Jane Smith", "Business Management")
-    ));
+
+    private RestTemplate restTemplate;
+
+    List<Student> students;
+
+    private StudentRest rest;
 
     public List<Student> getAllStudents() {
+        students = new ArrayList<>();
+        rest = new StudentRest();
+        students.addAll(rest.fetchStudents());
         return students;
     }
 
     public Student getStudent(int id) {
-        return students.stream().filter(student -> student.getId() == id).findFirst().get();
+        return rest.fetchStudent(id);
+//        return students.stream().filter(student -> student.getId() == id).findFirst().get();
     }
 
     public void createStudent(Student student) {
-        students.add(student);
+        students.add(rest.addStudent(student));
     }
 
     public Student updateStudent(int id, Student student) {
-        Student stud = this.getStudent(id);
-        stud.setId(id);
-        stud.setName(student.getName());
-        stud.setCourse(student.getCourse());
-        return stud;
+        return rest.editStudent(student, id);
     }
 
-    public List<Student> deleteStudent(int id) {
-        students.remove(this.getStudent(id));
-        return students;
+    public Student deleteStudent(int id) {
+        return rest.deleteStudent(id);
     }
 }

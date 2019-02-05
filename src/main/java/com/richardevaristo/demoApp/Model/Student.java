@@ -1,7 +1,11 @@
 package com.richardevaristo.demoApp.Model;
 
-public class Student {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Id;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Student {
+    @Id
     private int id;
     private String name;
     private String course;
@@ -37,4 +41,5 @@ public class Student {
     public void setCourse(String course) {
         this.course = course;
     }
+
 }

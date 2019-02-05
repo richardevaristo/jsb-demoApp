@@ -32,8 +32,8 @@ public class StudentController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value="/students/{id}")
-    public List<Student> deleteStudent(@PathVariable int id) {
-        return studentService.deleteStudent(id);
+    public void deleteStudent(@PathVariable int id) {
+        studentService.deleteStudent(id);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value="/students/{id}")
