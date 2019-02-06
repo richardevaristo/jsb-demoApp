@@ -1,19 +1,20 @@
 package com.richardevaristo.demoApp.Rest;
 
 import com.richardevaristo.demoApp.Model.Blog;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-public class BlogRest {
+@Service
+public class BlogRest{
+
     private RestTemplate restTemplate;
-    private static Logger log = LoggerFactory.getLogger(BlogRest.class);
+
     private static String BASE_URI = "http://10.0.16.84:3000";
     public BlogRest() {
         restTemplate = new RestTemplate();
@@ -35,8 +36,7 @@ public class BlogRest {
                 BASE_URI + "/blogs/" +id,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<Blog>() {
-                }
+                Blog.class
         );
         return response.getBody();
     }

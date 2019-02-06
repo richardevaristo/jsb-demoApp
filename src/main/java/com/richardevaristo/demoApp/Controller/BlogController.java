@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://10.0.16.84:3001")
-//@CrossOrigin(origins = "http://richardevaristo.github.io/react-blog-redux-thunk-saga/#/")
 public class BlogController {
 
     @Autowired
