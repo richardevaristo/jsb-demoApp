@@ -1,6 +1,8 @@
 package com.richardevaristo.demoApp.Rest;
 
+import com.richardevaristo.demoApp.Dao.BlogRepository;
 import com.richardevaristo.demoApp.Model.Blog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -11,16 +13,14 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Service
-public class BlogRest{
+public class BlogRest implements BlogRepository {
 
+    @Autowired
     private RestTemplate restTemplate;
 
     private static String BASE_URI = "http://10.0.16.84:3000";
-    public BlogRest() {
-        restTemplate = new RestTemplate();
-    }
 
-    public List<Blog> fetchBlogs() {
+    public List<Blog> findAll() {
         ResponseEntity<List<Blog>> response = restTemplate.exchange(
                 BASE_URI + "/blogs",
                 HttpMethod.GET,
@@ -31,44 +31,32 @@ public class BlogRest{
         return response.getBody();
     }
 
-    public Blog fetchBlog(int id) {
-        ResponseEntity<Blog> response = restTemplate.exchange(
-                BASE_URI + "/blogs/" +id,
-                HttpMethod.GET,
-                null,
-                Blog.class
-        );
-        return response.getBody();
+    @Override
+    public Blog findById(int id) {
+        return execute("/blogs/" + id, HttpMethod.GET, null);
     }
 
-    public Blog addBlog(Blog blog) {
-        HttpEntity<Blog> entity = new HttpEntity<>(blog);
+    @Override
+    public Blog save(Blog blog) {
+        return execute("/blogs", HttpMethod.POST, new HttpEntity<>(blog));
+    }
+
+    @Override
+    public Blog update(int id, Blog blog) {
+        return execute("/blogs/" + id, HttpMethod.PUT, new HttpEntity<>(blog));
+    }
+
+    @Override
+    public Blog remove(int id) {
+        return execute("/blogs/" + id, HttpMethod.DELETE, null);
+    }
+
+    @Override
+    public Blog execute(String url, HttpMethod method, HttpEntity<Blog> entity) {
         ResponseEntity<Blog> response = restTemplate.exchange(
-                BASE_URI + "/blogs",
-                HttpMethod.POST,
+                BASE_URI+url,
+                method,
                 entity,
-                Blog.class
-        );
-
-        return response.getBody();
-    }
-
-    public Blog editBlog(int id, Blog blog) {
-        HttpEntity<Blog> entity = new HttpEntity<>(blog);
-        ResponseEntity<Blog> response = restTemplate.exchange(
-                BASE_URI + "/blogs/" + id,
-                HttpMethod.PUT,
-                entity,
-                Blog.class
-        );
-        return response.getBody();
-    }
-
-    public Blog deleteBlog(int id) {
-        ResponseEntity<Blog> response = restTemplate.exchange(
-                BASE_URI + "/blogs/" + id,
-                HttpMethod.DELETE,
-                null,
                 Blog.class
         );
         return response.getBody();

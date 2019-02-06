@@ -20,8 +20,8 @@ public class BlogController {
     }
 
     @RequestMapping("/blogs/{id}")
-    public Blog getStudent(@PathVariable int id) {
-        return blogService.getStudent(id);
+    public Blog getBlog(@PathVariable int id) {
+        return blogService.getBlog(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/blogs")
